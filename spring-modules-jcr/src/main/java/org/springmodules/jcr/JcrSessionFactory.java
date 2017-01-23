@@ -81,7 +81,7 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 
 	/**
 	 * Constructor with all the required fields.
-	 * 
+	 *
 	 * @param repository
 	 * @param workspaceName
 	 * @param credentials
@@ -92,7 +92,7 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 
 	/**
 	 * Constructor containing all the fields available.
-	 * 
+	 *
 	 * @param repository
 	 * @param workspaceName
 	 * @param credentials
@@ -206,8 +206,8 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 				overwrittenNamespaces = new HashMap(namespaces.size());
 
 			// search occurences
-			for (Iterator iter = namespaces.keySet().iterator(); iter.hasNext();) {
-				String prefix = (String) iter.next();
+			for (Object o : namespaces.keySet()) {
+				String prefix = (String) o;
 				int position = Arrays.binarySearch(prefixes, prefix);
 				if (position >= 0) {
 					if (log.isDebugEnabled()) {
@@ -224,8 +224,8 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 		}
 
 		// do the registration
-		for (Iterator iter = namespaces.entrySet().iterator(); iter.hasNext();) {
-			Map.Entry namespace = (Map.Entry) iter.next();
+		for (Map.Entry<Object, Object> objectObjectEntry : namespaces.entrySet()) {
+			Map.Entry namespace = (Map.Entry) objectObjectEntry;
 			String prefix = (String) namespace.getKey();
 			String ns = (String) namespace.getValue();
 
@@ -233,8 +233,7 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 
 			if (skipExistingNamespaces && position >= 0) {
 				log.debug("namespace already registered under [" + prefix + "]; skipping registration");
-			}
-			else {
+			} else {
 				log.debug("registering namespace [" + ns + "] under [" + prefix + "]");
 				registry.registerNamespace(prefix, ns);
 			}
@@ -264,8 +263,8 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 
 		NamespaceRegistry registry = getSession().getWorkspace().getNamespaceRegistry();
 
-		for (Iterator iter = namespaces.keySet().iterator(); iter.hasNext();) {
-			String prefix = (String) iter.next();
+		for (Object o1 : namespaces.keySet()) {
+			String prefix = (String) o1;
 			registry.unregisterNamespace(prefix);
 		}
 
@@ -273,8 +272,8 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 			if (log.isDebugEnabled())
 				log.debug("reverting back overwritten namespaces " + overwrittenNamespaces);
 			if (overwrittenNamespaces != null)
-				for (Iterator iter = overwrittenNamespaces.entrySet().iterator(); iter.hasNext();) {
-					Map.Entry entry = (Map.Entry) iter.next();
+				for (Object o : overwrittenNamespaces.entrySet()) {
+					Map.Entry entry = (Map.Entry) o;
 					registry.registerNamespace((String) entry.getKey(), (String) entry.getValue());
 				}
 		}
@@ -308,10 +307,10 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 			if (log.isDebugEnabled())
 				log.debug("adding listeners " + Arrays.asList(eventListeners).toString() + " for session " + session);
 
-			for (int i = 0; i < eventListeners.length; i++) {
-				manager.addEventListener(eventListeners[i].getListener(), eventListeners[i].getEventTypes(),
-						eventListeners[i].getAbsPath(), eventListeners[i].isDeep(), eventListeners[i].getUuid(),
-						eventListeners[i].getNodeTypeName(), eventListeners[i].isNoLocal());
+			for (EventListenerDefinition eventListener : eventListeners) {
+				manager.addEventListener(eventListener.getListener(), eventListener.getEventTypes(),
+						eventListener.getAbsPath(), eventListener.isDeep(), eventListener.getUuid(),
+						eventListener.getNodeTypeName(), eventListener.isNoLocal());
 			}
 		}
 		return session;
@@ -348,7 +347,7 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append("SessionFactory for ");
 		buffer.append(getRepositoryInfo());
 		buffer.append("|workspace=");
@@ -380,7 +379,7 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 		if (getRepository() == null)
 			return "<N/A>";
 
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(getRepository().getDescriptor(Repository.REP_NAME_DESC));
 		buffer.append(" ");
 		buffer.append(getRepository().getDescriptor(Repository.REP_VERSION_DESC));
@@ -468,7 +467,7 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 	 * context is destroyed.
 	 * 
 	 * False by default.
-	 * 
+	 *
 	 * @param forceNamespacesRegistration The forceNamespacesRegistration to
 	 * set.
 	 */
@@ -487,7 +486,7 @@ public class JcrSessionFactory implements InitializingBean, DisposableBean, Sess
 	 * namespace unregistration which render the
 	 * {@link #setForceNamespacesRegistration(boolean)} method useless (as
 	 * namespace registration cannot be forced).
-	 * 
+	 *
 	 * @param skipRegisteredNamespace The skipRegisteredNamespace to set.
 	 */
 	public void setSkipExistingNamespaces(boolean skipRegisteredNamespace) {

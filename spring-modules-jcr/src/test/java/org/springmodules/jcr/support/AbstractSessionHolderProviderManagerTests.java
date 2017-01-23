@@ -26,14 +26,16 @@ import org.springmodules.jcr.SessionHolderProvider;
  */
 public class AbstractSessionHolderProviderManagerTests extends TestCase {
 
-	AbstractSessionHolderProviderManager providerManager;
-	List providers;
-	String repositoryName;
-	MockControl sfCtrl, sessCtrl, repoCtrl;
-	Repository repo;
-	Session sess;
-	SessionFactory sf;
-	SessionHolderProvider customProvider;
+	protected AbstractSessionHolderProviderManager providerManager;
+	protected List providers;
+	protected String repositoryName;
+	protected MockControl sfCtrl;
+	protected MockControl sessCtrl;
+	protected MockControl repoCtrl;
+	protected Repository repo;
+	protected Session sess;
+	protected SessionFactory sf;
+	protected SessionHolderProvider customProvider;
 	
 
 	protected void setUp() throws Exception {

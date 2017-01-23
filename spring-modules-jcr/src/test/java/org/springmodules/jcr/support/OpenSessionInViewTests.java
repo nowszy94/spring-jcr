@@ -155,48 +155,34 @@ public class OpenSessionInViewTests extends TestCase {
         final OpenSessionInViewFilter filter3 = new OpenSessionInViewFilter();
         filter3.init(filterConfig3);
 
-        final FilterChain filterChain = new FilterChain() {
-            public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse)
-                throws IOException, ServletException {
-                assertTrue(TransactionSynchronizationManager.hasResource(sf));
-                // check sf-related things
-                assertSame(holder, TransactionSynchronizationManager.getResource(sf));
-                assertSame(session, holder.getSession());
-                
-                servletRequest.setAttribute("invoked", Boolean.TRUE);
-            }
+        final FilterChain filterChain = (servletRequest, servletResponse) -> {
+            assertTrue(TransactionSynchronizationManager.hasResource(sf));
+            // check sf-related things
+            assertSame(holder, TransactionSynchronizationManager.getResource(sf));
+            assertSame(session, holder.getSession());
+
+            servletRequest.setAttribute("invoked", Boolean.TRUE);
         };
 
-        final FilterChain filterChain2 = new FilterChain() {
-            public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse)
-                throws IOException, ServletException {
-                assertTrue(TransactionSynchronizationManager.hasResource(sf));
-                // check sf-related things
-                assertSame(holder, TransactionSynchronizationManager.getResource(sf));
-                assertSame(session, holder.getSession());
-                
-                filter3.doFilter(servletRequest, servletResponse, filterChain);
-            }
+        final FilterChain filterChain2 = (servletRequest, servletResponse) -> {
+            assertTrue(TransactionSynchronizationManager.hasResource(sf));
+            // check sf-related things
+            assertSame(holder, TransactionSynchronizationManager.getResource(sf));
+            assertSame(session, holder.getSession());
+
+            filter3.doFilter(servletRequest, servletResponse, filterChain);
         };
 
-        final FilterChain filterChain3 = new FilterChain() {
-            public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse)
-                throws IOException, ServletException {
-                assertTrue(TransactionSynchronizationManager.hasResource(sf2));
-                // check sf2-related things
-                assertSame(holder2, TransactionSynchronizationManager.getResource(sf2));
-                assertSame(session2, holder2.getSession());
-                
-                filter.doFilter(servletRequest, servletResponse, filterChain2);
-            }
+        final FilterChain filterChain3 = (servletRequest, servletResponse) -> {
+            assertTrue(TransactionSynchronizationManager.hasResource(sf2));
+            // check sf2-related things
+            assertSame(holder2, TransactionSynchronizationManager.getResource(sf2));
+            assertSame(session2, holder2.getSession());
+
+            filter.doFilter(servletRequest, servletResponse, filterChain2);
         };
 
-        FilterChain filterChain4 = new FilterChain() {
-            public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse)
-                throws IOException, ServletException {
-                filter2.doFilter(servletRequest, servletResponse, filterChain3);
-            }
-        };
+        FilterChain filterChain4 = (servletRequest, servletResponse) -> filter2.doFilter(servletRequest, servletResponse, filterChain3);
 
         assertFalse(TransactionSynchronizationManager.hasResource(sf));
         assertFalse(TransactionSynchronizationManager.hasResource(sf2));

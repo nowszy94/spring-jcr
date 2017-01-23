@@ -32,11 +32,11 @@ public class EventListenerDefinition implements InitializingBean {
     private EventListener listener;
     private int eventTypes = Event.NODE_ADDED | Event.NODE_REMOVED | Event.PROPERTY_ADDED | Event.PROPERTY_CHANGED | Event.PROPERTY_REMOVED;
     
-    String absPath ="/";
-    boolean isDeep = true;
-    String[] uuid;
-    String[] nodeTypeName;
-    boolean noLocal = false;
+    private String absPath ="/";
+    private boolean isDeep = true;
+    private String[] uuid;
+    private String[] nodeTypeName;
+    private boolean noLocal = false;
     
     /**
      * @return Returns the absPath.

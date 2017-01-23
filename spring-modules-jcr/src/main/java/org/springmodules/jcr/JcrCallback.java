@@ -27,5 +27,5 @@ public interface JcrCallback {
      * application exeception; it is propagated to the caller of the
      * template.
      */
-    public Object doInJcr(Session session) throws IOException, RepositoryException;
+    Object doInJcr(Session session) throws IOException, RepositoryException;
 }

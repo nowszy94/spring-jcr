@@ -57,7 +57,7 @@ public abstract class JcrUtils {
 			if (name.length() == 0) {
 				return name;
 			}
-			if (XMLChar.isValidName(name) && name.indexOf("_x") < 0) {
+			if (XMLChar.isValidName(name) && !name.contains("_x")) {
 				// already valid
 				return name;
 			}
@@ -104,7 +104,7 @@ public abstract class JcrUtils {
 		 */
 		public String decode(String name) {
 			// quick check
-			if (name.indexOf("_x") < 0) {
+			if (!name.contains("_x")) {
 				// not encoded
 				return name;
 			}
@@ -158,7 +158,7 @@ public abstract class JcrUtils {
 		}
 	}
 
-	private static ISO9075 escaper = new ISO9075();
+	private static final ISO9075 escaper = new ISO9075();
 
 	public static boolean supportsLevel2(Repository repository) {
 		return "true".equals(repository.getDescriptor(Repository.LEVEL_2_SUPPORTED));

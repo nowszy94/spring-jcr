@@ -25,7 +25,7 @@ public interface SessionFactory {
      * @return the JCR session.
      * @throws RepositoryException
      */
-    public Session getSession() throws RepositoryException;
+    Session getSession() throws RepositoryException;
     
     /**
      * Returns a specific SessionHolder for the given Session. The holder provider is used
@@ -34,5 +34,5 @@ public interface SessionFactory {
      * 
      * @return specific sessionHolder.
      */
-    public SessionHolder getSessionHolder(Session session);
+    SessionHolder getSessionHolder(Session session);
 }

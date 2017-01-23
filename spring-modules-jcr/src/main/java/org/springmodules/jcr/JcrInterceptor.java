@@ -77,9 +77,8 @@ public class JcrInterceptor extends JcrAccessor implements MethodInterceptor {
             TransactionSynchronizationManager.bindResource(getSessionFactory(), getSessionFactory().getSessionHolder(session));
         }
         try {
-            Object retVal = methodInvocation.proceed();
             // flushIfNecessary(session, existingTransaction);
-            return retVal;
+            return methodInvocation.proceed();
         } finally {
             if (existingTransaction) {
                 logger.debug("Not closing pre-bound JCR Session after interceptor");

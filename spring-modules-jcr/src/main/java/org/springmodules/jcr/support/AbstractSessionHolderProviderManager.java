@@ -46,8 +46,8 @@ public abstract class AbstractSessionHolderProviderManager implements SessionHol
 		List providers = getProviders();
 
 		// search the provider
-		for (int i = 0; i < providers.size(); i++) {
-			SessionHolderProvider provider = (SessionHolderProvider) providers.get(i);
+		for (Object provider1 : providers) {
+			SessionHolderProvider provider = (SessionHolderProvider) provider1;
 			if (provider.acceptsRepository(key)) {
 				if (log.isDebugEnabled())
 					log.debug("specific SessionHolderProvider found for repository " + key);

@@ -29,7 +29,7 @@ public interface JcrOperations extends JcrOptionalOperations {
      * @throws org.springframework.dao.DataAccessException
      *             in case of Jcr errors
      */
-    public Object execute(JcrCallback action, boolean exposeNativeSession) throws DataAccessException;
+    Object execute(JcrCallback action, boolean exposeNativeSession) throws DataAccessException;
 
     /**
      * Execute the action specified by the given action object within a
@@ -50,7 +50,7 @@ public interface JcrOperations extends JcrOptionalOperations {
      *            the <code>JCRCallback</code> that executes the client
      *            operation
      */
-    public Object execute(JcrCallback callback) throws DataAccessException;
+    Object execute(JcrCallback callback) throws DataAccessException;
 
     /**
      * Dump the contents of the given node in a String. This method parses the whole
@@ -58,11 +58,11 @@ public interface JcrOperations extends JcrOptionalOperations {
      * 
      * @param node
      *            node to be dumped (null is equivalent to the root node)
-     *            
+     *
      * @return node tree in a string representation.
      *             
      */
-    public String dump(Node node);
+    String dump(Node node);
     
     /**
      * Renames a node (with the given name) 
@@ -71,6 +71,6 @@ public interface JcrOperations extends JcrOptionalOperations {
      * @param newName new name for the node
      * 
      */
-    public void rename(Node node, String newName);
+    void rename(Node node, String newName);
 
 }

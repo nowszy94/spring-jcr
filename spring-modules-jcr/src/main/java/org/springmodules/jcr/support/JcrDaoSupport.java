@@ -20,7 +20,7 @@ import org.springmodules.jcr.SessionFactoryUtils;
  * @author Guillaume Bort <guillaume.bort@zenexity.fr>
  */
 public abstract class JcrDaoSupport extends DaoSupport {
-	private static Logger log = LoggerFactory.getLogger(JcrDaoSupport.class);
+	private static final Logger log = LoggerFactory.getLogger(JcrDaoSupport.class);
 	
 	private JcrTemplate template;
 

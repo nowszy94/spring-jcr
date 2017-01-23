@@ -19,7 +19,7 @@ public class NodeUtils {
         return propertiesMap;
     }
 
-    public static <T extends Object> T getProperty(Node node, String propertyName, Class<T> clazz) {
+    public static <T> T getProperty(Node node, String propertyName, Class<T> clazz) {
         return (T) getProperties(node).get(propertyName);
     }
 

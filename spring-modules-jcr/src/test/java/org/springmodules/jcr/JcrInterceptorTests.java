@@ -83,7 +83,7 @@ public class JcrInterceptorTests extends TestCase {
 
     private static class TestInvocation implements MethodInvocation {
 
-        private SessionFactory sessionFactory;
+        private final SessionFactory sessionFactory;
 
         public TestInvocation(SessionFactory sessionFactory) {
             this.sessionFactory = sessionFactory;

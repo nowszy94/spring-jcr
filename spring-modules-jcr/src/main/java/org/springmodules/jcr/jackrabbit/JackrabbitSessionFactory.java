@@ -59,8 +59,7 @@ public class JackrabbitSessionFactory extends JcrSessionFactory {
 			JackrabbitNodeTypeManager nodeTypeManager = (JackrabbitNodeTypeManager) ws.getNodeTypeManager();
 
 			boolean debug = log.isDebugEnabled();
-			for (int i = 0; i < nodeDefinitions.length; i++) {
-				Resource resource = nodeDefinitions[i];
+			for (Resource resource : nodeDefinitions) {
 				if (debug)
 					log.debug("adding node type definitions from " + resource.getDescription());
 

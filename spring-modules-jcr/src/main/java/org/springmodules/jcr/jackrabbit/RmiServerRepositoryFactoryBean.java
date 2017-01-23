@@ -21,7 +21,6 @@ import javax.jcr.Repository;
 
 import org.apache.jackrabbit.rmi.remote.RemoteRepository;
 import org.apache.jackrabbit.rmi.server.RemoteAdapterFactory;
-import org.apache.jackrabbit.rmi.server.ServerAdapterFactory;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**

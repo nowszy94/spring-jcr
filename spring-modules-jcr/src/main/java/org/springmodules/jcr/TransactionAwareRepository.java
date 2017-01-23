@@ -186,45 +186,43 @@ public class TransactionAwareRepository implements InitializingBean, FactoryBean
 
 			// Invocation on Repository interface coming in...
 			// check method invocation
-			if (method.getName().equals("login")) {
-				boolean matched = false;
+			switch (method.getName()) {
+				case "login":
+					boolean matched = false;
 
-				// check method signature
-				Class[] paramTypes = method.getParameterTypes();
+					// check method signature
+					Class[] paramTypes = method.getParameterTypes();
 
-				// a. login()
-				if (paramTypes.length == 0) {
-					// match the sessionFactory definitions
-					matched = (sessionFactory.getWorkspaceName() == null && sessionFactory.getCredentials() == null);
-				}
-				else if (paramTypes.length == 1) {
-					// b. login(java.lang.String workspaceName)
-					if (paramTypes[0] == String.class)
-						matched = ObjectUtils.nullSafeEquals(args[0], sessionFactory.getWorkspaceName());
-					// c. login(Credentials credentials)
-					if (Credentials.class.isAssignableFrom(paramTypes[0]))
-						matched = ObjectUtils.nullSafeEquals(args[0], sessionFactory.getCredentials());
-				}
-				else if (paramTypes.length == 2) {
-					// d. login(Credentials credentials, java.lang.String workspaceName)
-					matched = ObjectUtils.nullSafeEquals(args[0], sessionFactory.getCredentials())
-							&& ObjectUtils.nullSafeEquals(args[1], sessionFactory.getWorkspaceName());
-				}
+					// a. login()
+					if (paramTypes.length == 0) {
+						// match the sessionFactory definitions
+						matched = (sessionFactory.getWorkspaceName() == null && sessionFactory.getCredentials() == null);
+					} else if (paramTypes.length == 1) {
+						// b. login(java.lang.String workspaceName)
+						if (paramTypes[0] == String.class)
+							matched = ObjectUtils.nullSafeEquals(args[0], sessionFactory.getWorkspaceName());
+						// c. login(Credentials credentials)
+						if (Credentials.class.isAssignableFrom(paramTypes[0]))
+							matched = ObjectUtils.nullSafeEquals(args[0], sessionFactory.getCredentials());
+					} else if (paramTypes.length == 2) {
+						// d. login(Credentials credentials, java.lang.String workspaceName)
+						matched = ObjectUtils.nullSafeEquals(args[0], sessionFactory.getCredentials())
+								&& ObjectUtils.nullSafeEquals(args[1], sessionFactory.getWorkspaceName());
+					}
 
-				if (matched) {
-					Session session = SessionFactoryUtils.getSession(sessionFactory, isAllowCreate());
-					Class[] ifcs = ClassUtils.getAllInterfaces(session);
-					return (Session) Proxy.newProxyInstance(getClass().getClassLoader(), ifcs,
-							new TransactionAwareInvocationHandler(session, sessionFactory));
-				}
-			}
-			else if (method.getName().equals("equals")) {
-				// Only consider equal when proxies are identical.
-				return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
-			}
-			else if (method.getName().equals("hashCode")) {
-				// Use hashCode of Repository proxy.
-				return new Integer(hashCode());
+					if (matched) {
+						Session session = SessionFactoryUtils.getSession(sessionFactory, isAllowCreate());
+						Class[] ifcs = ClassUtils.getAllInterfaces(session);
+						return Proxy.newProxyInstance(getClass().getClassLoader(), ifcs,
+								new TransactionAwareInvocationHandler(session, sessionFactory));
+					}
+					break;
+				case "equals":
+					// Only consider equal when proxies are identical.
+					return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
+				case "hashCode":
+					// Use hashCode of Repository proxy.
+					return hashCode();
 			}
 
 			Repository target = getTargetRepository();
@@ -256,20 +254,19 @@ public class TransactionAwareRepository implements InitializingBean, FactoryBean
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			// Invocation on Session interface coming in...
 
-			if (method.getName().equals("equals")) {
-				// Only consider equal when proxies are identical.
-				return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
-			}
-			else if (method.getName().equals("hashCode")) {
-				// Use hashCode of Session proxy.
-				return new Integer(hashCode());
-			}
-			else if (method.getName().equals("logout")) {
-				// Handle close method: only close if not within a transaction.
-				if (this.sessionFactory != null) {
-					SessionFactoryUtils.releaseSession(this.target, this.sessionFactory);
-				}
-				return null;
+			switch (method.getName()) {
+				case "equals":
+					// Only consider equal when proxies are identical.
+					return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
+				case "hashCode":
+					// Use hashCode of Session proxy.
+					return hashCode();
+				case "logout":
+					// Handle close method: only close if not within a transaction.
+					if (this.sessionFactory != null) {
+						SessionFactoryUtils.releaseSession(this.target, this.sessionFactory);
+					}
+					return null;
 			}
 
 			// Invoke method on target Session.

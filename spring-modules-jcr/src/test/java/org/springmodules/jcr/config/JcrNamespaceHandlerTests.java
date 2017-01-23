@@ -47,10 +47,10 @@ public class JcrNamespaceHandlerTests extends TestCase {
 		assertPropertyValue(beanDefinition, "absPath", "/somePath");
 		assertPropertyValue(beanDefinition, "isDeep", "true");
 		assertPropertyValue(beanDefinition, "noLocal", "false");
-		assertPropertyValue(beanDefinition, "eventType", new Integer(17));
-		assertTrue(ObjectUtils.nullSafeEquals(new String[] { "123" }, (Object[]) getPropertyValue(beanDefinition,
+		assertPropertyValue(beanDefinition, "eventType", 17);
+		assertTrue(ObjectUtils.nullSafeEquals(new String[] { "123" }, getPropertyValue(beanDefinition,
 				"uuid")));
-		assertTrue(ObjectUtils.nullSafeEquals(new String[] { "foo", "bar" }, (Object[]) getPropertyValue(
+		assertTrue(ObjectUtils.nullSafeEquals(new String[] { "foo", "bar" }, getPropertyValue(
 				beanDefinition, "nodeTypeName")));
 	}
 

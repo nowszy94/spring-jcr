@@ -91,10 +91,9 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 
 		try {
 			Session sessionToExpose = (exposeNativeSession ? session : createSessionProxy(session));
-			Object result = action.doInJcr(sessionToExpose);
 			// TODO: does flushing (session.refresh) should work here?
 			// flushIfNecessary(session, existingTransaction);
-			return result;
+			return action.doInJcr(sessionToExpose);
 		} catch (RepositoryException ex) {
 			throw convertJcrAccessException(ex);
 			// IOException are not converted here
@@ -144,16 +143,9 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public void addLockToken(final String lock) {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
+		execute(session -> {
 				session.getWorkspace().getLockManager().addLockToken(lock);
 				return null;
-			}
 		}, true);
 	}
 
@@ -162,16 +154,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public Object getAttribute(final String name) {
-		return execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getAttribute(name);
-			}
-		}, true);
+		return execute(session -> session.getAttribute(name), true);
 	}
 
 	/* (non-Javadoc)
@@ -179,16 +162,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public String[] getAttributeNames() {
-		return (String[]) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getAttributeNames();
-			}
-		}, true);
+		return (String[]) execute(session -> session.getAttributeNames(), true);
 	}
 
 	/* (non-Javadoc)
@@ -196,16 +170,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public ContentHandler getImportContentHandler(final String parentAbsPath, final int uuidBehavior) {
-		return (ContentHandler) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getImportContentHandler(parentAbsPath, uuidBehavior);
-			}
-		}, true);
+		return (ContentHandler) execute(session -> session.getImportContentHandler(parentAbsPath, uuidBehavior), true);
 	}
 
 	/* (non-Javadoc)
@@ -213,16 +178,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public Item getItem(final String absPath) {
-		return (Item) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getItem(absPath);
-			}
-		}, true);
+		return (Item) execute(session -> session.getItem(absPath), true);
 	}
 
 	/* (non-Javadoc)
@@ -230,16 +186,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public String[] getLockTokens() {
-		return (String[]) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getWorkspace().getLockManager().getLockTokens();
-			}
-		}, true);
+		return (String[]) execute(session -> session.getWorkspace().getLockManager().getLockTokens(), true);
 	}
 
 	/* (non-Javadoc)
@@ -247,16 +194,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public String getNamespacePrefix(final String uri) {
-		return (String) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getNamespacePrefix(uri);
-			}
-		}, true);
+		return (String) execute(session -> session.getNamespacePrefix(uri), true);
 	}
 
 	/* (non-Javadoc)
@@ -264,16 +202,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public String[] getNamespacePrefixes() {
-		return (String[]) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getNamespacePrefixes();
-			}
-		}, true);
+		return (String[]) execute(session -> session.getNamespacePrefixes(), true);
 	}
 
 	/* (non-Javadoc)
@@ -281,16 +210,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public String getNamespaceURI(final String prefix) {
-		return (String) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getNamespaceURI(prefix);
-			}
-		}, true);
+		return (String) execute(session -> session.getNamespaceURI(prefix), true);
 	}
 
 	/* (non-Javadoc)
@@ -298,16 +218,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public Node getNodeByUUID(final String uuid) {
-		return (Node) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getNodeByIdentifier(uuid);
-			}
-		}, true);
+		return (Node) execute(session -> session.getNodeByIdentifier(uuid), true);
 	}
 
 	/* (non-Javadoc)
@@ -315,16 +226,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public Node getRootNode() {
-		return (Node) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getRootNode();
-			}
-		}, true);
+		return (Node) execute(session -> session.getRootNode(), true);
 	}
 
 	/* (non-Javadoc)
@@ -332,16 +234,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public String getUserID() {
-		return (String) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getUserID();
-			}
-		}, true);
+		return (String) execute(session -> session.getUserID(), true);
 	}
 
 	/* (non-Javadoc)
@@ -349,16 +242,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public ValueFactory getValueFactory() {
-		return (ValueFactory) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return session.getValueFactory();
-			}
-		}, true);
+		return (ValueFactory) execute(session -> session.getValueFactory(), true);
 	}
 
 	/* (non-Javadoc)
@@ -366,16 +250,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public boolean hasPendingChanges() {
-		return ((Boolean) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return new Boolean(session.hasPendingChanges());
-			}
-		}, true)).booleanValue();
+		return (Boolean) execute(session -> session.hasPendingChanges(), true);
 	}
 
 	/* (non-Javadoc)
@@ -383,21 +258,14 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public void importXML(final String parentAbsPath, final InputStream in, final int uuidBehavior) {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				try {
-					session.importXML(parentAbsPath, in, uuidBehavior);
-				} catch (IOException e) {
-					throw new JcrSystemException(e);
-				}
-				return null;
-			}
-		}, true);
+		execute(session -> {
+            try {
+                session.importXML(parentAbsPath, in, uuidBehavior);
+            } catch (IOException e) {
+                throw new JcrSystemException(e);
+            }
+            return null;
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -405,17 +273,10 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public void refresh(final boolean keepChanges) {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				session.refresh(keepChanges);
-				return null;
-			}
-		}, true);
+		execute(session -> {
+            session.refresh(keepChanges);
+            return null;
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -423,17 +284,10 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public void removeLockToken(final String lt) {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				session.getWorkspace().getLockManager().removeLockToken(lt);
-				return null;
-			}
-		}, true);
+		execute(session -> {
+            session.getWorkspace().getLockManager().removeLockToken(lt);
+            return null;
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -441,34 +295,20 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public void rename(final Node node, final String newName) {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				session.move(node.getPath(), node.getParent().getPath() + "/" + newName);
-				return null;
-			}
-		}, true);
+		execute(session -> {
+            session.move(node.getPath(), node.getParent().getPath() + "/" + newName);
+            return null;
+        }, true);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.springmodules.jcr.JcrModel2Operations#setNamespacePrefix(java.lang.String, java.lang.String)
 	 */
 	public void setNamespacePrefix(final String prefix, final String uri) {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				session.setNamespacePrefix(prefix, uri);
-				return null;
-			}
-		}, true);
+		execute(session -> {
+            session.setNamespacePrefix(prefix, uri);
+            return null;
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -476,16 +316,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public boolean isLive() {
-		return ((Boolean) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return new Boolean(session.isLive());
-			}
-		}, true)).booleanValue();
+		return (Boolean) execute(session -> session.isLive(), true);
 	}
 
 	/* (non-Javadoc)
@@ -493,16 +324,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public boolean itemExists(final String absPath) {
-		return ((Boolean) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				return new Boolean(session.itemExists(absPath));
-			}
-		}, true)).booleanValue();
+		return (Boolean) execute(session -> session.itemExists(absPath), true);
 	}
 
 	/* (non-Javadoc)
@@ -510,17 +332,10 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public void move(final String srcAbsPath, final String destAbsPath) {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				session.move(srcAbsPath, destAbsPath);
-				return null;
-			}
-		}, true);
+		execute(session -> {
+            session.move(srcAbsPath, destAbsPath);
+            return null;
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -528,17 +343,10 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public void save() {
-		execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				session.save();
-				return null;
-			}
-		}, true);
+		execute(session -> {
+            session.save();
+            return null;
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -546,18 +354,11 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	 */
 	@Override
 	public String dump(final Node node) {
-		return (String) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				Node nd = node;
-				if (nd == null) { nd = session.getRootNode(); }
-				return dumpNode(nd);
-			}
-		}, true);
+		return (String) execute(session -> {
+            Node nd = node;
+            if (nd == null) { nd = session.getRootNode(); }
+            return dumpNode(nd);
+        }, true);
 	}
 
 	/**
@@ -575,7 +376,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 		PropertyIterator properties = node.getProperties();
 		while (properties.hasNext()) {
 			Property property = properties.nextProperty();
-			builder.append(property.getPath() + "=");
+			builder.append(property.getPath()).append("=");
 			if (property.getDefinition().isMultiple()) {
 				Value[] values = property.getValues();
 				for (int i = 0; i < values.length; i++) {
@@ -606,21 +407,16 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 			throw new IllegalArgumentException("node can't be null");
 		}
 		
-		return (QueryResult) execute(new JcrCallback() {
-			/**
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			public Object doInJcr(Session session) throws RepositoryException {
-				boolean debug = logger.isDebugEnabled();
+		return (QueryResult) execute(session -> {
+            boolean debug = logger.isDebugEnabled();
 
-				// get query manager
-				QueryManager manager = session.getWorkspace().getQueryManager();
-				if (debug) { logger.debug("retrieved manager " + manager); }
-				Query query = manager.getQuery(node);
-				if (debug) { logger.debug("created query " + query); }
-				return query.execute();
-			}
-		}, true);
+            // get query manager
+            QueryManager manager = session.getWorkspace().getQueryManager();
+            if (debug) { logger.debug("retrieved manager " + manager); }
+            Query query = manager.getQuery(node);
+            if (debug) { logger.debug("created query " + query); }
+            return query.execute();
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -637,27 +433,20 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	@Override
 	public QueryResult query(final String statement, final String language) {
 		notNull(statement, "statement can't be null");
-		return (QueryResult) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				
-				// check language
-				String lang = language;
-				if (lang == null) { lang = Query.XPATH; }
-				boolean debug = logger.isDebugEnabled();
+		return (QueryResult) execute(session -> {
 
-				// get query manager
-				QueryManager manager = session.getWorkspace().getQueryManager();
-				if (debug) { logger.debug("retrieved manager " + manager); }
-				Query query = manager.createQuery(statement, lang);
-				if (debug) { logger.debug("created query " + query); }
-				return query.execute();
-			}
-		}, true);
+            // check language
+            String lang = language;
+            if (lang == null) { lang = Query.XPATH; }
+            boolean debug = logger.isDebugEnabled();
+
+            // get query manager
+            QueryManager manager = session.getWorkspace().getQueryManager();
+            if (debug) { logger.debug("retrieved manager " + manager); }
+            Query query = manager.createQuery(statement, lang);
+            if (debug) { logger.debug("created query " + query); }
+            return query.execute();
+        }, true);
 	}
 
 	/* (non-Javadoc)
@@ -676,45 +465,38 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 		if (list == null)
 			throw new IllegalArgumentException("list can't be null");
 
-		return (Map) execute(new JcrCallback() {
-			
-			/* (non-Javadoc)
-			 * @see org.springmodules.jcr.JcrCallback#doInJcr(javax.jcr.Session)
-			 */
-			@Override
-			public Object doInJcr(Session session) throws RepositoryException {
-				
-				// check language
-				String lang = language;
-				if (lang == null) { lang = Query.XPATH; }
-				boolean debug = logger.isDebugEnabled();
+		return (Map) execute(session -> {
 
-				Map map = CollectionFactory.createLinkedMapIfPossible(list.size());
+            // check language
+            String lang = language;
+            if (lang == null) { lang = Query.XPATH; }
+            boolean debug = logger.isDebugEnabled();
 
-				// get query manager
-				QueryManager manager = session.getWorkspace().getQueryManager();
-				if (debug) { logger.debug("retrieved manager " + manager); }
-				for (Iterator iter = list.iterator(); iter.hasNext();) {
-					String statement = (String) iter.next();
+            Map map = CollectionFactory.createLinkedMapIfPossible(list.size());
 
-					Query query = manager.createQuery(statement, lang);
-					if (debug) { logger.debug("created query " + query); }
+            // get query manager
+            QueryManager manager = session.getWorkspace().getQueryManager();
+            if (debug) { logger.debug("retrieved manager " + manager); }
+            for (Iterator iter = list.iterator(); iter.hasNext();) {
+                String statement = (String) iter.next();
 
-					QueryResult result;
-					try {
-						result = query.execute();
-						map.put(statement, result);
-					} catch (RepositoryException e) {
-						if (ignoreErrors) {
-							map.put(statement, null);
-						} else {
-							throw convertJcrAccessException(e);
-						}
-					}
-				}
-				return map;
-			}
-		}, true);
+                Query query = manager.createQuery(statement, lang);
+                if (debug) { logger.debug("created query " + query); }
+
+                QueryResult result;
+                try {
+                    result = query.execute();
+                    map.put(statement, result);
+                } catch (RepositoryException e) {
+                    if (ignoreErrors) {
+                        map.put(statement, null);
+                    } else {
+                        throw convertJcrAccessException(e);
+                    }
+                }
+            }
+            return map;
+        }, true);
 	}
 
 	/**
@@ -752,7 +534,7 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 				return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
 			} else if ("hashCode".equals(methodName)) {
 				// Use hashCode of session proxy.
-				return new Integer(hashCode());
+				return hashCode();
 			} else if ("logout".equals(methodName)) {
 				// Handle close method: suppress, not valid.
 				return null;
@@ -760,14 +542,13 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 
 			// Invoke method on target Session.
 			try {
-				Object retVal = method.invoke(this.target, args);
 
 				// TODO: watch out for Query returned
 				/*
 				 * if (retVal instanceof Query) { prepareQuery(((Query)
 				 * retVal)); }
 				 */
-				return retVal;
+				return method.invoke(this.target, args);
 			} catch (InvocationTargetException ex) {
 				throw ex.getTargetException();
 			}

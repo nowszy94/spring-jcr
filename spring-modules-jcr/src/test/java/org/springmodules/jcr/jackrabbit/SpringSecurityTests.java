@@ -15,18 +15,13 @@
  */
 package org.springmodules.jcr.jackrabbit;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
 import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
-import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 /**
@@ -48,25 +43,22 @@ public class SpringSecurityTests extends AbstractTransactionalSpringContextTests
 	 */
 	protected void onSetUpBeforeTransaction() throws Exception {
 		SecurityContextHolder.getContext().setAuthentication(
-				new TestingAuthenticationToken(new Object(), new Object(), new ArrayList<GrantedAuthority>()));
+				new TestingAuthenticationToken(new Object(), new Object(), new ArrayList<>()));
 
 	}
 
 	public void testWriteRights() {
-		template.execute(new JcrCallback() {
-
-			public Object doInJcr(Session session) throws IOException, RepositoryException {
-				Node rootNode = session.getRootNode();
-				Node one = rootNode.addNode("bla-bla-bla");
-				one.setProperty("some prop", false);
-				Node two = one.addNode("foo");
-				two.setProperty("boo", "hoo");
-				Node three = two.addNode("bar");
-				three.setProperty("whitehorse", new String[] { "super", "ultra", "mega" });
-				session.save();
-				return null;
-			}
-		});
+		template.execute(session -> {
+            Node rootNode = session.getRootNode();
+            Node one = rootNode.addNode("bla-bla-bla");
+            one.setProperty("some prop", false);
+            Node two = one.addNode("foo");
+            two.setProperty("boo", "hoo");
+            Node three = two.addNode("bar");
+            three.setProperty("whitehorse", new String[] { "super", "ultra", "mega" });
+            session.save();
+            return null;
+        });
 	}
 
 	public void setTemplate(JcrTemplate template) {

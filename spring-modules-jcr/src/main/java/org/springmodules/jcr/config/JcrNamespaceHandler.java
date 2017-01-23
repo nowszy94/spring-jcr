@@ -75,11 +75,10 @@ public class JcrNamespaceHandler extends NamespaceHandlerSupport {
 				// compute event type
 				int eventType = 0;
 				Constants types = new Constants(Event.class);
-				for (Iterator<Element> iter = eventTypes.iterator(); iter.hasNext();) {
-					Element evenTypeElement = iter.next();
+				for (Element evenTypeElement : eventTypes) {
 					eventType |= types.asNumber(DomUtils.getTextValue(evenTypeElement)).intValue();
 				}
-				definitionBuilder.addPropertyValue(EVENT_TYPE, new Integer(eventType));
+				definitionBuilder.addPropertyValue(EVENT_TYPE, eventType);
 			}
 
 			List<Element> nodeTypeNames = DomUtils.getChildElementsByTagName(element, NODE_TYPE_NAME);

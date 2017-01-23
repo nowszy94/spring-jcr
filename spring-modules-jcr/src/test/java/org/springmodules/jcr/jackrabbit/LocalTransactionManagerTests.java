@@ -145,13 +145,10 @@ public class LocalTransactionManagerTests extends TestCase {
 				protected void doInTransactionWithoutResult(TransactionStatus status) {
 					assertTrue("Has thread session", TransactionSynchronizationManager.hasResource(sf));
 					JcrTemplate template = new JcrTemplate(sf);
-					template.execute(new JcrCallback() {
-						public Object doInJcr(Session se) throws RepositoryException {
-							se.save();
-							throw new RuntimeException();
-						}
-
-					});
+					template.execute(se -> {
+                        se.save();
+                        throw new RuntimeException();
+                    });
 				}
 			});
 		}
@@ -207,13 +204,10 @@ public class LocalTransactionManagerTests extends TestCase {
 			protected void doInTransactionWithoutResult(TransactionStatus status) {
 				assertTrue("Has thread session", TransactionSynchronizationManager.hasResource(sf));
 				JcrTemplate template = new JcrTemplate(sf);
-				template.execute(new JcrCallback() {
-					public Object doInJcr(Session se) throws RepositoryException {
-						se.save();
-						return null;
-					}
-
-				});
+				template.execute(se -> {
+                    se.save();
+                    return null;
+                });
 				status.setRollbackOnly();
 			}
 		});
@@ -244,11 +238,7 @@ public class LocalTransactionManagerTests extends TestCase {
 				protected void doInTransactionWithoutResult(TransactionStatus status) {
 					assertTrue("Has thread session", TransactionSynchronizationManager.hasResource(sf));
 					JcrTemplate template = new JcrTemplate(sf);
-					template.execute(new JcrCallback() {
-						public Object doInJcr(Session session) throws RepositoryException {
-							return null;
-						}
-					});
+					template.execute(session -> null);
 				}
 			});
 			fail("Should have thrown InvalidIsolationLevelException");

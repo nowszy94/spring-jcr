@@ -26,7 +26,7 @@ public interface SessionHolderProvider {
 	 * @param session
 	 * @return
 	 */
-	public SessionHolder createSessionHolder(Session session);
+	SessionHolder createSessionHolder(Session session);
 
 	/**
 	 * Method for maching the sessionHolderProvider against a repository (given by name).
@@ -34,5 +34,5 @@ public interface SessionHolderProvider {
 	 * @param repositoryName
 	 * @return true if the sessionHolderProvider is suitable for the given repository name, false otherwise.
 	 */
-	public boolean acceptsRepository(String repositoryName);
+	boolean acceptsRepository(String repositoryName);
 }

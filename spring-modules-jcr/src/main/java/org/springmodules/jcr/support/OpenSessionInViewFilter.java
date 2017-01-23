@@ -49,7 +49,7 @@ import org.springmodules.jcr.SessionFactoryUtils;
  * @author Costin Leau
  */
 public class OpenSessionInViewFilter extends OncePerRequestFilter {
-	public static final String DEFAULT_JCR_SESSION_FACTORY_FACTORY_BEAN_NAME = "sessionFactory";
+	private static final String DEFAULT_JCR_SESSION_FACTORY_FACTORY_BEAN_NAME = "sessionFactory";
 
 	private static final Logger log = LoggerFactory.getLogger(OpenSessionInViewFilter.class);
 	
@@ -130,7 +130,7 @@ public class OpenSessionInViewFilter extends OncePerRequestFilter {
 	protected SessionFactory lookupSessionFactory() {
 		log.debug("Using session factory '{}' for OpenSessionInViewFilter", getSessionFactoryBeanName());
 		WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-		return (SessionFactory) wac.getBean(getSessionFactoryBeanName(), SessionFactory.class);
+		return wac.getBean(getSessionFactoryBeanName(), SessionFactory.class);
 	}
 
 }

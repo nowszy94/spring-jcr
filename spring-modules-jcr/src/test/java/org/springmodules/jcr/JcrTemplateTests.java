@@ -130,17 +130,15 @@ public class JcrTemplateTests extends TestCase {
         jt.setExposeNativeSession(true);
         
 
-        jt.execute(new JcrCallback() {
-            public Object doInJcr(Session sess) throws RepositoryException {
-                assertFalse(sess.hashCode() == session.hashCode());
-                assertEquals(sess, sess);
-                assertFalse(sess.equals(null));
-                assertFalse(sess.equals(session));
-                sess.getAttribute("smth");
-                // logout is proxied so it will not reach our mock
-                sess.logout();
-                return null;
-            }
+        jt.execute(session -> {
+            assertFalse(session.hashCode() == this.session.hashCode());
+            assertEquals(session, session);
+            assertFalse(session.equals(null));
+            assertFalse(session.equals(this.session));
+            session.getAttribute("smth");
+            // logout is proxied so it will not reach our mock
+            session.logout();
+            return null;
         }, false);
 
     }
@@ -148,11 +146,7 @@ public class JcrTemplateTests extends TestCase {
     public void testTemplateExecuteWithNotAllowCreate() {
         jt.setAllowCreate(false);
         try {
-            jt.execute(new JcrCallback() {
-                public Object doInJcr(Session session) {
-                    return null;
-                }
-            });
+            jt.execute(session1 -> null);
             fail("Should have thrown IllegalStateException");
         } catch (IllegalStateException ex) {
             // expected
@@ -170,11 +164,7 @@ public class JcrTemplateTests extends TestCase {
         TransactionSynchronizationManager.bindResource(sf, new SessionHolder(session));
         final List l = new ArrayList();
         l.add("test");
-        List result = (List) jt.execute(new JcrCallback() {
-            public Object doInJcr(Session session) {
-                return l;
-            }
-        });
+        List result = (List) jt.execute(session1 -> l);
         assertTrue("Correct result list", result == l);
         TransactionSynchronizationManager.unbindResource(sf);
     }
@@ -187,21 +177,15 @@ public class JcrTemplateTests extends TestCase {
 
         final List l = new ArrayList();
         l.add("test");
-        List result = (List) jt.execute(new JcrCallback() {
-            public Object doInJcr(Session session) {
-                return l;
-            }
-        });
+        List result = (List) jt.execute(session1 -> l);
         assertTrue("Correct result list", result == l);
     }
 
     public void testTemplateExceptions() throws RepositoryException {
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new AccessDeniedException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new AccessDeniedException();
             });
             fail("Should have thrown DataRetrievalFailureException");
         } catch (DataRetrievalFailureException ex) {
@@ -209,10 +193,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new ConstraintViolationException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new ConstraintViolationException();
             });
             fail("Should have thrown DataIntegrityViolationException");
         } catch (DataIntegrityViolationException ex) {
@@ -220,10 +202,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new InvalidItemStateException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new InvalidItemStateException();
             });
             fail("Should have thrown ConcurrencyFailureException");
         } catch (ConcurrencyFailureException ex) {
@@ -231,10 +211,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new InvalidQueryException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new InvalidQueryException();
             });
             fail("Should have thrown DataRetrievalFailureException");
         } catch (DataRetrievalFailureException ex) {
@@ -242,10 +220,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new ItemExistsException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new ItemExistsException();
             });
             fail("Should have thrown DataIntegrityViolationException");
         } catch (DataIntegrityViolationException ex) {
@@ -253,10 +229,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new ItemNotFoundException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new ItemNotFoundException();
             });
             fail("Should have thrown DataRetrievalFailureException");
         } catch (DataRetrievalFailureException ex) {
@@ -264,70 +238,56 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new LockException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new LockException();
             });
             fail("Should have thrown ConcurrencyFailureException");
         } catch (ConcurrencyFailureException ex) {
             // expected
         }
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new NamespaceException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new NamespaceException();
             });
             fail("Should have thrown InvalidDataAccessApiUsageException");
         } catch (InvalidDataAccessApiUsageException ex) {
             // expected
         }
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new NoSuchNodeTypeException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new NoSuchNodeTypeException();
             });
             fail("Should have thrown InvalidDataAccessApiUsageException");
         } catch (InvalidDataAccessApiUsageException ex) {
             // expected
         }
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new NoSuchWorkspaceException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new NoSuchWorkspaceException();
             });
             fail("Should have thrown DataAccessResourceFailureException");
         } catch (DataAccessResourceFailureException ex) {
             // expected
         }
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new PathNotFoundException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new PathNotFoundException();
             });
             fail("Should have thrown DataRetrievalFailureException");
         } catch (DataRetrievalFailureException ex) {
             // expected
         }
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new ReferentialIntegrityException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new ReferentialIntegrityException();
             });
             fail("Should have thrown DataIntegrityViolationException");
         } catch (DataIntegrityViolationException ex) {
             // expected
         }
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new UnsupportedRepositoryOperationException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new UnsupportedRepositoryOperationException();
             });
             fail("Should have thrown InvalidDataAccessApiUsageException");
         } catch (InvalidDataAccessApiUsageException ex) {
@@ -335,10 +295,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new ValueFormatException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new ValueFormatException();
             });
             fail("Should have thrown InvalidDataAccessApiUsageException");
         } catch (InvalidDataAccessApiUsageException ex) {
@@ -346,10 +304,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new VersionException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new VersionException();
             });
             fail("Should have thrown DataIntegrityViolationException");
         } catch (DataIntegrityViolationException ex) {
@@ -357,10 +313,8 @@ public class JcrTemplateTests extends TestCase {
         }
 
         try {
-            createTemplate().execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws RepositoryException {
-                    throw new RepositoryException();
-                }
+            createTemplate().execute(session1 -> {
+                throw new RepositoryException();
             });
             fail("Should have thrown JcrSystemException");
         } catch (JcrSystemException ex) {

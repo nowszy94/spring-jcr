@@ -23,67 +23,67 @@ public interface JcrModel1Operations {
 	/**
 	 * @see javax.jcr.Session#getAttribute(java.lang.String)
 	 */
-	public Object getAttribute(String name);
+	Object getAttribute(String name);
 
 	/**
 	 * @see javax.jcr.Session#getAttributeNames()
 	 */
-	public String[] getAttributeNames();
+	String[] getAttributeNames();
 
 	/**
 	 * @see javax.jcr.Session#getImportContentHandler(java.lang.String, int)
 	 */
-	public ContentHandler getImportContentHandler(String parentAbsPath, int uuidBehavior);
+	ContentHandler getImportContentHandler(String parentAbsPath, int uuidBehavior);
 
 	/**
 	 * @see javax.jcr.Session#getItem(java.lang.String)
 	 */
-	public Item getItem(String absPath);
+	Item getItem(String absPath);
 
 	/**
 	 * @see javax.jcr.Session#getNamespacePrefix(java.lang.String)
 	 */
-	public String getNamespacePrefix(String uri);
+	String getNamespacePrefix(String uri);
 
 	/**
 	 * @see javax.jcr.Session#getNamespacePrefixes()
 	 */
-	public String[] getNamespacePrefixes();
+	String[] getNamespacePrefixes();
 
 	/**
 	 * @see javax.jcr.Session#getNamespaceURI(java.lang.String)
 	 */
-	public String getNamespaceURI(String prefix);
+	String getNamespaceURI(String prefix);
 
 	/**
 	 * @see javax.jcr.Session#getNodeByUUID(java.lang.String)
 	 */
-	public Node getNodeByUUID(String uuid);
+	Node getNodeByUUID(String uuid);
 
 	/**
 	 * @see javax.jcr.Session#getRootNode(); 
 	 */
-	public Node getRootNode();
+	Node getRootNode();
 
 	/**
 	 * @see javax.jcr.Session#getUserID()
 	 */
-	public String getUserID();
+	String getUserID();
 
 	/**
 	 * @see javax.jcr.Session#getValueFactory()
 	 */
-	public ValueFactory getValueFactory();
+	ValueFactory getValueFactory();
 
 	/**
 	 * @see javax.jcr.Session#isLive()
 	 */
-	public boolean isLive();
+	boolean isLive();
 
 	/**
 	 * @see javax.jcr.Session#itemExists(java.lang.String)
 	 */
-	public boolean itemExists(String absPath);
+	boolean itemExists(String absPath);
 
 	/**
 	 * Execute a persistent query from the given node.
@@ -92,7 +92,7 @@ public interface JcrModel1Operations {
 	 * @param node node to be dumped
 	 * @return query result
 	 */
-	public QueryResult query(Node node);
+	QueryResult query(Node node);
 
 	/**
 	 * Execute a query with the given strings with XPATH as default language.
@@ -102,7 +102,7 @@ public interface JcrModel1Operations {
 	 * @param statement query statement
 	 * @return query result
 	 */
-	public QueryResult query(String statement);
+	QueryResult query(String statement);
 
 	/**
 	 * Execute a query with the given strings.
@@ -112,7 +112,7 @@ public interface JcrModel1Operations {
 	 * @param language language statement
 	 * @return query result
 	 */
-	public QueryResult query(String statement, String language);
+	QueryResult query(String statement, String language);
 
 	/**
 	 * Default method for doing multiple queries. It assumes the language is
@@ -122,7 +122,7 @@ public interface JcrModel1Operations {
 	 *            repository
 	 * @return a map containing the queries as keys and results as values
 	 */
-	public Map query(final List list);
+	Map query(final List list);
 
 	/**
 	 * Utility method for executing a list of queries against the repository.
@@ -139,6 +139,6 @@ public interface JcrModel1Operations {
 	 * @param ignoreErrors if true it will populate unfound nodes with null
 	 * @return a map containing the queries as keys and results as values
 	 */
-	public Map query(final List list, final String language, final boolean ignoreErrors);
+	Map query(final List list, final String language, final boolean ignoreErrors);
 
 }

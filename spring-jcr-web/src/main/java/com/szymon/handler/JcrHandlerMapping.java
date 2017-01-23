@@ -13,7 +13,7 @@ public class JcrHandlerMapping extends AbstractHandlerMapping {
     @Autowired
     private Session session;
 
-    private Controller controller;
+    private final Controller controller;
 
     public JcrHandlerMapping(Controller controller) {
         this.controller = controller;

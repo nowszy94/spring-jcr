@@ -6,3 +6,5 @@ target/
 repository/
 derby.log
 repository.xml
+spring-jcr-web.iml
+spring-modules-jcr.iml

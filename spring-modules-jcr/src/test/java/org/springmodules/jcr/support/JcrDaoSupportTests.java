@@ -62,7 +62,7 @@ public class JcrDaoSupportTests extends TestCase {
 
 		JcrDaoSupport dao = new JcrDaoSupport() {
 			public void smth() {
-			};
+			}
 		};
 
 		dao.setSessionFactory(sf);
@@ -77,7 +77,7 @@ public class JcrDaoSupportTests extends TestCase {
 		JcrTemplate template = new JcrTemplate();
 		JcrDaoSupport dao = new JcrDaoSupport() {
 			public void smth() {
-			};
+			}
 		};
 
 		dao.setTemplate(template);
