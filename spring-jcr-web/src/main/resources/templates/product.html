@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${product_name}">Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+          rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/core.css}"
+          rel="stylesheet" media="screen"/>
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js"
+            th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+</head>
+<body style="background: #1E90FF;">
+<div class="container" style="background: white;">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills float-xs-right">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+        </nav>
+        <h3 class="text-muted">Project name</h3>
+    </div>
+    <div class="jumbotron">
+        <h1 class="display-3" th:text="${heading}">THIS IS A PRODUCT PAGE</h1>
+        <p class="lead" th:text="${description}">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+    </div>
+    <div class="row marketing">
+        <div class="col-lg-6">
+            <h4 th:text="${subheading}">Subheading</h4>
+            <p th:text="${description2}">Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+        </div>
+        <div class="col-lg-6">
+            <img th:src="${imgUrl}" height="400" width="400"/>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/myScript}"></script>
+</body>
+</html>
