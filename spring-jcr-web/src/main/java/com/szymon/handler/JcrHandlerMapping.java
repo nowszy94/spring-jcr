@@ -4,14 +4,14 @@ import com.szymon.utils.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 import org.springframework.web.servlet.mvc.Controller;
+import org.springmodules.jcr.JcrTemplate;
 
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
 public class JcrHandlerMapping extends AbstractHandlerMapping {
 
     @Autowired
-    private Session session;
+    private JcrTemplate jcrTemplate;
 
     private final Controller controller;
 
@@ -20,7 +20,7 @@ public class JcrHandlerMapping extends AbstractHandlerMapping {
     }
 
     @Override
-    protected Object getHandlerInternal(HttpServletRequest request) throws Exception {
-        return session.itemExists("/" + RequestUtils.getRelativePath(request)) ? controller : null;
+    protected Object getHandlerInternal(HttpServletRequest request) {
+        return jcrTemplate.itemExists("/" + RequestUtils.getRelativePath(request)) ? controller : null;
     }
 }

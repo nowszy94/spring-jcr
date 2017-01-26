@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,6 +119,16 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
 	@Override
 	public Object execute(JcrCallback callback) throws DataAccessException {
 		return execute(callback, isExposeNativeSession());
+	}
+
+	@Override
+	public <T> T execute(JcrCallback callback, Class<T> clazz) throws DataAccessException {
+		return (T) execute(callback);
+	}
+
+	@Override
+	public <T> T execute(JcrCallback action, boolean exposeNativeSession, Class<T> clazz) throws DataAccessException {
+		return (T) execute(action, exposeNativeSession);
 	}
 
 	/**
@@ -472,7 +483,8 @@ public class JcrTemplate extends JcrAccessor implements JcrOperations {
             if (lang == null) { lang = Query.XPATH; }
             boolean debug = logger.isDebugEnabled();
 
-            Map map = CollectionFactory.createLinkedMapIfPossible(list.size());
+			//Map map = CollectionFactory.createLinkedMapIfPossible(list.size());
+			Map map = new LinkedHashMap(list.size());
 
             // get query manager
             QueryManager manager = session.getWorkspace().getQueryManager();

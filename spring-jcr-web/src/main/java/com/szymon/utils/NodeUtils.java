@@ -1,13 +1,18 @@
 package com.szymon.utils;
 
-import javax.jcr.*;
-import java.util.HashMap;
+import org.springmodules.jcr.JcrTemplate;
+
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class NodeUtils {
 
     public static Map<String, Object> getProperties(Node node) {
-        Map<String, Object> propertiesMap = new HashMap<>();
+        Map<String, Object> propertiesMap = new TreeMap<>();
         try {
             PropertyIterator properties = node.getProperties();
             while (properties.hasNext()) {
@@ -19,16 +24,21 @@ public class NodeUtils {
         return propertiesMap;
     }
 
-    public static <T> T getProperty(Node node, String propertyName, Class<T> clazz) {
-        return (T) getProperties(node).get(propertyName);
+    public static String getProperty(Node node, String propertyName) {
+        return getProperty(node, propertyName, String.class);
     }
 
-    public static Node getNode(Session session, String relPath) {
-        try {
-            return session.getRootNode().getNode(relPath);
-        } catch (RepositoryException e) {
-            return null;
+    public static <T> T getProperty(Node node, String propertyName, Class<T> clazz) {
+        Map<String, Object> properties = getProperties(node);
+        T t = null;
+        if (properties.containsKey(propertyName)) {
+            t = (T) getProperties(node).get(propertyName);
         }
+        return t;
+    }
+
+    public static Node getNode(JcrTemplate jcrTemplate, String absPath) {
+        return (Node) jcrTemplate.getItem(absPath);
     }
 
 }

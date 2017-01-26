@@ -4,6 +4,8 @@
 target/
 .idea/
 repository/
+data/
+transaction-logs/
 derby.log
 repository.xml
 spring-jcr-web.iml

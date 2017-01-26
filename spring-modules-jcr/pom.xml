@@ -19,11 +19,11 @@
 
 	<properties>
 		<easymock.version>2.5.2</easymock.version>
-		<jackrabbit.version>2.10.0</jackrabbit.version>
+		<jackrabbit.version>2.14.0</jackrabbit.version>
 		<jcr.version>2.0</jcr.version>
 		<slf4j.version>1.7.12</slf4j.version>
-		<spring.security.version>3.2.7.RELEASE</spring.security.version>
-		<spring.version>3.2.13.RELEASE</spring.version>
+		<spring.security.version>4.2.1.RELEASE</spring.security.version>
+		<spring.version>4.2.1.RELEASE</spring.version>
 
 		<!-- Prevent chirping about platform-dependent builds. -->
 		<!-- See http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding -->
@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<version>3.1.0</version>
 		</dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -121,7 +121,14 @@
 			<version>${jackrabbit.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.3.5.RELEASE</version>
+		</dependency>
+
+
 		<!-- Test -->
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -147,6 +154,13 @@
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.webflow/spring-webflow -->
+		<dependency>
+			<groupId>org.springframework.webflow</groupId>
+			<artifactId>spring-webflow</artifactId>
+			<version>2.4.4.RELEASE</version>
+		</dependency>
+
 
 		<!-- Other -->
 		<dependency>
@@ -154,10 +168,15 @@
             <artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>xerces</groupId>-->
+			<!--<artifactId>xerces</artifactId>-->
+			<!--<version>2.4.0</version>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>xerces</groupId>
-			<artifactId>xerces</artifactId>
-			<version>2.4.0</version>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.11.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

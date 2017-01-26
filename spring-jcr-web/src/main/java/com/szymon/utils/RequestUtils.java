@@ -9,4 +9,8 @@ public class RequestUtils {
         int endIndex = requestURI.indexOf(".");
         return requestURI.substring(1, endIndex < 0 ? requestURI.length() : endIndex);
     }
+
+    public static String getAbsoultePath(HttpServletRequest request) {
+        return "/" + getRelativePath(request);
+    }
 }

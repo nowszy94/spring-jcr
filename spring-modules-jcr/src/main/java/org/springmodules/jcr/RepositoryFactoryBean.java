@@ -22,7 +22,7 @@ import org.springframework.core.io.Resource;
  * @author Costin Leau
  *
  */
-public abstract class RepositoryFactoryBean implements InitializingBean, DisposableBean, FactoryBean {
+public abstract class RepositoryFactoryBean implements InitializingBean, DisposableBean, FactoryBean<Repository> {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
@@ -67,7 +67,7 @@ public abstract class RepositoryFactoryBean implements InitializingBean, Disposa
 	/**
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
 	 */
-	public Object getObject() throws Exception {
+	public Repository getObject() throws Exception {
 		return this.repository;
 	}
 

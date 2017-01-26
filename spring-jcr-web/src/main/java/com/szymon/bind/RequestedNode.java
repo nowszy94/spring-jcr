@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springmodules.jcr.JcrTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.jcr.Node;
-import javax.jcr.Session;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class RequestedNode {
     private HttpServletRequest request;
 
     @Autowired
-    private Session session;
+    private JcrTemplate jcrTemplate;
 
     private Node node;
 
@@ -39,7 +39,7 @@ public class RequestedNode {
     }
 
     private void initNode() {
-        this.node = NodeUtils.getNode(session, path.substring(1));
+        this.node = NodeUtils.getNode(jcrTemplate, path);
     }
 
     private void initPath() {
@@ -49,14 +49,6 @@ public class RequestedNode {
     private void initProperties() {
         this.properties = new HashMap<>();
         this.properties.putAll(NodeUtils.getProperties(node));
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
     }
 
     public HttpServletRequest getRequest() {

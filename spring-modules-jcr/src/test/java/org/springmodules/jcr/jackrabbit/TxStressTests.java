@@ -15,21 +15,15 @@
  */
 package org.springmodules.jcr.jackrabbit;
 
-import java.io.IOException;
+import org.springmodules.jcr.JcrTemplate;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
-import org.springframework.test.AbstractTransactionalSpringContextTests;
-import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrTemplate;
 
 /**
  * @author Costin Leau
- * 
+ *
  */
-public class TxStressTests extends AbstractTransactionalSpringContextTests {
+public class TxStressTests /*extends AbstractTransactionalSpringContextTests */{
 
 	private JcrTemplate template;
 
@@ -39,8 +33,8 @@ public class TxStressTests extends AbstractTransactionalSpringContextTests {
 
 	public void testMultipleCommits() {
 		for (int i = 0; i < 100; i++) {
-			endTransaction();
-			startNewTransaction();
+//			endTransaction();
+//			startNewTransaction();
 			template.execute(session -> {
                 Node rootNode = session.getRootNode();
                 Node one = rootNode.addNode("bla-bla-bla");
@@ -52,8 +46,8 @@ public class TxStressTests extends AbstractTransactionalSpringContextTests {
                 session.save();
                 return null;
             });
-			setComplete();
-			endTransaction();
+//			setComplete();
+//			endTransaction();
 
 		}
 

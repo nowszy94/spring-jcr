@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.jcr.Repository;
 
-import org.springframework.util.CachingMapDecorator;
+import org.springframework.binding.collection.AbstractCachingMapDecorator;
 import org.springmodules.jcr.SessionHolderProvider;
 
 /**
@@ -27,14 +27,11 @@ public abstract class CacheableSessionHolderProviderManager extends AbstractSess
 	 * @author Costin Leau
 	 *
 	 */
-	protected class ProvidersCache extends CachingMapDecorator {
+	protected class ProvidersCache extends AbstractCachingMapDecorator {
 		private ProvidersCache() {
 			super(true);
 		}
 
-		/**
-		 * @see org.springframework.util.CachingMapDecorator#create(java.lang.Object)
-		 */
 		protected Object create(Object key) {
 			return parentLookup((Repository) key);
 		}
@@ -49,7 +46,6 @@ public abstract class CacheableSessionHolderProviderManager extends AbstractSess
 	/**
 	 * Method for retrieving the parent functionality.
 	 * 
-	 * @param sf
 	 * @return
 	 */
 	private SessionHolderProvider parentLookup(Repository repository) {

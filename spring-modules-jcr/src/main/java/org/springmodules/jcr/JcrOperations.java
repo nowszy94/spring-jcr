@@ -38,19 +38,23 @@ public interface JcrOperations extends JcrOptionalOperations {
      * exceptions are transformed into appropriate DAO ones. Allows for
      * returning a result object, i.e. a domain object or a collection of domain
      * objects.
-     * 
+     *
      * Note: Callback code does not need to explicitly log out of the
      * <code>Session</code>; this method will handle that itself.
-     * 
+     *
      * The workspace logged into will be that named by the
      * <code>workspaceName</code> property; if that property is
      * <code>null</code>, the repository's default workspace will be used.
-     * 
+     *
      * @param callback
      *            the <code>JCRCallback</code> that executes the client
      *            operation
      */
     Object execute(JcrCallback callback) throws DataAccessException;
+
+    <T> T execute(JcrCallback callback, Class<T> clazz) throws DataAccessException;
+
+    <T> T execute(JcrCallback action, boolean exposeNativeSession, Class<T> clazz) throws DataAccessException;
 
     /**
      * Dump the contents of the given node in a String. This method parses the whole

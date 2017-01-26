@@ -15,53 +15,50 @@
  */
 package org.springmodules.jcr.jackrabbit;
 
-import java.util.ArrayList;
-
-import javax.jcr.Node;
-
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.AbstractTransactionalSpringContextTests;
 import org.springmodules.jcr.JcrTemplate;
+
+import javax.jcr.Node;
+import java.util.ArrayList;
 
 /**
  * @author Costin Leau
- * 
  */
-public class SpringSecurityTests extends AbstractTransactionalSpringContextTests {
+public class SpringSecurityTests /*extends AbstractTransactionalSpringContextTests*/ {
 
-	private JcrTemplate template;
+    private JcrTemplate template;
 
-	protected String[] getConfigLocations() {
-		return new String[] { "/org/springmodules/jcr/jackrabbit/acegi-context.xml" };
-	}
+    protected String[] getConfigLocations() {
+        return new String[]{"/org/springmodules/jcr/jackrabbit/acegi-context.xml"};
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.test.AbstractTransactionalSpringContextTests#onSetUpBeforeTransaction()
-	 */
-	protected void onSetUpBeforeTransaction() throws Exception {
-		SecurityContextHolder.getContext().setAuthentication(
-				new TestingAuthenticationToken(new Object(), new Object(), new ArrayList<>()));
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.test.AbstractTransactionalSpringContextTests#onSetUpBeforeTransaction()
+     */
+    protected void onSetUpBeforeTransaction() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(
+                new TestingAuthenticationToken(new Object(), new Object(), new ArrayList<>()));
 
-	}
+    }
 
-	public void testWriteRights() {
-		template.execute(session -> {
+    public void testWriteRights() {
+        template.execute(session -> {
             Node rootNode = session.getRootNode();
             Node one = rootNode.addNode("bla-bla-bla");
             one.setProperty("some prop", false);
             Node two = one.addNode("foo");
             two.setProperty("boo", "hoo");
             Node three = two.addNode("bar");
-            three.setProperty("whitehorse", new String[] { "super", "ultra", "mega" });
+            three.setProperty("whitehorse", new String[]{"super", "ultra", "mega"});
             session.save();
             return null;
         });
-	}
+    }
 
-	public void setTemplate(JcrTemplate template) {
-		this.template = template;
-	}
+    public void setTemplate(JcrTemplate template) {
+        this.template = template;
+    }
 }

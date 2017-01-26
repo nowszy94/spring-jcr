@@ -39,7 +39,7 @@ public class RepositoryFactoryBeanTests extends TestCase {
      */
     public void testCreateRepository() throws Exception {
         factory.afterPropertiesSet();
-        Repository rep = (Repository) factory.getObject();
+        Repository rep = factory.getObject();
         assertEquals(rep.getDescriptor("jcr.repository.name"), "Jackrabbit");
         
         assertEquals(true, factory.getObject() instanceof Repository);
