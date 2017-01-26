@@ -26,7 +26,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.springframework.core.CollectionFactory;
 import org.springframework.dao.DataAccessException;
 import org.xml.sax.ContentHandler;
 
