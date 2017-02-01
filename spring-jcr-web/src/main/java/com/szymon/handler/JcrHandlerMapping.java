@@ -1,17 +1,16 @@
 package com.szymon.handler;
 
-import com.szymon.utils.RequestUtils;
+import com.szymon.bind.RequestedNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springmodules.jcr.JcrTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class JcrHandlerMapping extends AbstractHandlerMapping {
 
     @Autowired
-    private JcrTemplate jcrTemplate;
+    private RequestedNode requestedNode;
 
     private final Controller controller;
 
@@ -21,6 +20,6 @@ public class JcrHandlerMapping extends AbstractHandlerMapping {
 
     @Override
     protected Object getHandlerInternal(HttpServletRequest request) {
-        return jcrTemplate.itemExists("/" + RequestUtils.getRelativePath(request)) ? controller : null;
+        return requestedNode.exists() ? controller : null;
     }
 }

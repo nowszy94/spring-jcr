@@ -8,5 +8,5 @@ data/
 transaction-logs/
 derby.log
 repository.xml
-spring-jcr-web.iml
-spring-modules-jcr.iml
+spring-jcr-web/spring-jcr-web.iml
+spring-modules-jcr/spring-modules-jcr.iml
